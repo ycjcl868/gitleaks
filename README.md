@@ -19,7 +19,7 @@ jobs:
     - name: wget
       uses: wei/wget@v1
       with:
-        args: -N -O .gitleaks.toml https://raw.githubusercontent.com/ycjcl868/gitleaks/master/.gitleaks.toml
+        args: -O .gitleaks.toml https://raw.githubusercontent.com/ycjcl868/gitleaks/master/.gitleaks.toml
     - name: gitleaks-action
       uses: zricethezav/gitleaks-action@master
 ```
