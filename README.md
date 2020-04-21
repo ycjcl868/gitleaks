@@ -28,6 +28,11 @@ jobs:
       uses: zricethezav/gitleaks-action@master
 ```
 
+About `fetch-depth`:
+
+- using a fetch-depth of '0' clones the entire history.
+- If you want to do a more efficient clone, use '2', but that is not guaranteed to work with pull requests.
+
 ### Using your own configuration
 
 create a `.gitleaks.toml` in the root of your repo directory.
