@@ -102,8 +102,8 @@ func TestWhiteList(t *testing.T) {
 	ruleCase := jsonData["WhiteList"]
 	ruleExps := config.Whitelist.Files
 	if ruleCase != nil {
-		match := false
 		for testString := range ruleCase {
+			match := false
 			expectVal := ruleCase[testString]
 			for _, ruleExp := range ruleExps {
 				//t.Log(ruleCase)
