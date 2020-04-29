@@ -37,7 +37,7 @@ title = "gitleaks config"
 	tags = ["key", "Github Token"]
 [[rules]]
 	description = "Alibaba"
-	regex = '''((alibaba|antfin)-inc|intranetproxy\.alipay)'''
+	regex = '''((alibaba|antfin|aliyun|alipay)(-inc|\.net)|intranetproxy\.alipay)'''
 	tags = ["key", "Alibaba"]
 [[rules]]
 	description = "antfin"
