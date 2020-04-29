@@ -66,7 +66,7 @@ The content of `package-lock.json`:
   // This is description in .gitleaks.toml
   "Github Token": {
     // testCase String <=> expectValue
-    "a3k2k3k3k3k3k3k3k3k3k3k3k3k12k12ksk": true,
+    "a3k2k3k3k3k3k3k3k3k3k3k3k33232k12ksk": true,
     "a3k2k3k3k3k3k3k3k3k3k3k3k3k12k1": false
   }
 }
