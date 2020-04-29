@@ -19,7 +19,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        fetch-depth: '2'
+        fetch-depth: '1'
     - name: wget
       uses: wei/wget@v1
       with:
@@ -48,7 +48,24 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        fetch-depth: '2'
+        fetch-depth: '1'
     - name: gitleaks-action
       uses: zricethezav/gitleaks-action@master
 ```
+
+## Contributing
+
+add rules in `.gitleaks.toml` and add test cases in `package-lock.json`.
+
+The content of `package-lock.json`:
+
+```json
+{
+  // This is description in .gitleaks.toml
+  "Github Token": {
+    // testCase String <=> expectValue
+    "a3k2k3k3k3k3k3k3k3k3k3k3k3k12k12ksk": true,
+    "a3k2k3k3k3k3k3k3k3k3k3k3k3k12k1": false
+  }
+}
+``` 
