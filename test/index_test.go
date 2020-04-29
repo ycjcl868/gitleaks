@@ -17,6 +17,7 @@ type TomlConfig struct {
 		Description string
 		Commits     []string
 		Files       []string
+		File			string
 		Paths       []string
 	}
 	Rules []struct {
@@ -60,11 +61,9 @@ func getData() (tomlconfig TomlConfig, jsonData map[string]map[string]bool) {
 	return config, result
 }
 
-
-func TestHello(t *testing.T)  {
+func TestRules(t *testing.T)  {
 	config, jsonData := getData()
 
-	t.Log(config.Rules[0].Description)
 	for _, rule := range config.Rules {
 		ruleCase := jsonData[rule.Description]
 		ruleExp := rule.Regex
@@ -95,3 +94,37 @@ func TestHello(t *testing.T)  {
 		}
 	}
 }
+
+func TestWhiteList(t *testing.T)  {
+	config, jsonData := getData()
+
+	ruleCase := jsonData["WhiteList"]
+	ruleExp := config.Whitelist.File
+	if ruleCase != nil {
+		//t.Log(ruleCase)
+		//t.Log(ruleExp)
+		for testString := range ruleCase {
+			expectVal := ruleCase[testString]
+
+			//t.Log(ruleCase)
+			re, err := regexp.Compile(ruleExp)
+			if err != nil {
+				fmt.Println(err)
+			}
+			match := re.FindString(testString)
+			t.Log("===WhiteList==")
+			t.Log("testString", testString)
+			t.Log("expectVal", expectVal)
+			t.Log("match", match)
+			actualVal := match != ""
+
+			t.Log("actualVal", actualVal)
+			t.Log("===WhiteList end==")
+			if (expectVal != actualVal) {
+				t.Errorf("whitelist failed, case Value %v, expected <%v>, but get <%v>", testString, expectVal, actualVal)
+			}
+		}
+	}
+}
+
+

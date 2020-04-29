@@ -1,5 +1,7 @@
 # Gitleaks Rules
 
+[![CircleCI](https://circleci.com/gh/ycjcl868/gitleaks.svg?style=svg)](https://circleci.com/gh/ycjcl868/gitleaks)
+
 > custom rules
 
 ## Usage
