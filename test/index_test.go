@@ -1,23 +1,24 @@
 package main
 
 import (
-	"fmt"
-	"github.com/BurntSushi/toml"
-	"regexp"
-	"testing"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
+	"regexp"
+	"testing"
+
+	"github.com/BurntSushi/toml"
 )
 
 type TomlConfig struct {
-	Title string
+	Title     string
 	Whitelist struct {
 		Description string
 		Commits     []string
 		Files       []string
-		File			string
+		File        string
 		Paths       []string
 	}
 	Rules []struct {
@@ -61,70 +62,62 @@ func getData() (tomlconfig TomlConfig, jsonData map[string]map[string]bool) {
 	return config, result
 }
 
-func TestRules(t *testing.T)  {
+func expectRule(reg string, testString string, expectBool bool, t *testing.T) {
+	//t.Log(ruleCase)
+	re, err := regexp.Compile(reg)
+	if err != nil {
+		fmt.Println(err)
+	}
+	actualBool := re.FindString(testString) != ""
+	if actualBool != expectBool {
+		t.Errorf("<%v> test failed, case Value %v, expected <%v>, but get <%v>", reg, testString, expectBool, actualBool)
+	}
+}
+
+
+func TestRules(t *testing.T) {
 	config, jsonData := getData()
 
 	for _, rule := range config.Rules {
 		ruleCase := jsonData[rule.Description]
 		ruleExp := rule.Regex
+		ruleFileNameExp := rule.FileNameRegex
 		if ruleCase != nil {
-			//t.Log(ruleCase)
-			//t.Log(ruleExp)
 			for testString := range ruleCase {
 				expectVal := ruleCase[testString]
+				if ruleFileNameExp != "" {
+					expectRule(ruleFileNameExp, testString, expectVal, t)
+				}
+				if ruleExp != "" {
+					expectRule(ruleExp, testString, expectVal, t)
+				}
+			}
+		}
+	}
+}
 
+func TestWhiteList(t *testing.T) {
+	config, jsonData := getData()
+
+	ruleCase := jsonData["WhiteList"]
+	ruleExps := config.Whitelist.Files
+	if ruleCase != nil {
+		match := false
+		for testString := range ruleCase {
+			expectVal := ruleCase[testString]
+			for _, ruleExp := range ruleExps {
 				//t.Log(ruleCase)
 				re, err := regexp.Compile(ruleExp)
 				if err != nil {
 					fmt.Println(err)
 				}
-				match := re.FindString(testString)
-				t.Log("===start==")
-				t.Log("testString", testString)
-				t.Log("expectVal", expectVal)
-				t.Log("match", match)
-				actualVal := match != ""
-
-				t.Log("actualVal", actualVal)
-				t.Log("===end==")
-				if (expectVal != actualVal) {
-					t.Errorf("<%v> test failed, case Value %v, expected <%v>, but get <%v>", rule.Description, testString, expectVal, actualVal)
+				if match == false {
+					match = re.FindString(testString) != ""
 				}
 			}
-		}
-	}
-}
-
-func TestWhiteList(t *testing.T)  {
-	config, jsonData := getData()
-
-	ruleCase := jsonData["WhiteList"]
-	ruleExp := config.Whitelist.File
-	if ruleCase != nil {
-		//t.Log(ruleCase)
-		//t.Log(ruleExp)
-		for testString := range ruleCase {
-			expectVal := ruleCase[testString]
-
-			//t.Log(ruleCase)
-			re, err := regexp.Compile(ruleExp)
-			if err != nil {
-				fmt.Println(err)
-			}
-			match := re.FindString(testString)
-			t.Log("===WhiteList==")
-			t.Log("testString", testString)
-			t.Log("expectVal", expectVal)
-			t.Log("match", match)
-			actualVal := match != ""
-
-			t.Log("actualVal", actualVal)
-			t.Log("===WhiteList end==")
-			if (expectVal != actualVal) {
-				t.Errorf("whitelist failed, case Value %v, expected <%v>, but get <%v>", testString, expectVal, actualVal)
+			if match != expectVal {
+				t.Errorf("whitelist test failed, case Value %v, expected <%v>, but get <%v>", testString, expectVal, match)
 			}
 		}
 	}
 }
-
-

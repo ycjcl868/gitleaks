@@ -119,6 +119,18 @@ title = "gitleaks config"
 	description = "Twilio API key"
 	regex = '''(?i)twilio(.{0,20})?['\"][0-9a-f]{32}['\"]'''
 	tags = ["key", "twilio"]
+[[rules]]
+	description = "Files with keys and credentials"
+    fileNameRegex = '''(?i)(id_rsa|passwd|id_rsa.pub|pgpass|pem|key|shadow)'''
 [whitelist]
 	description = "Whitelisted files"
-	file = '''(^\.?gitleaks.toml$|(.*?)(jpg|gif|doc|pdf|bin)$|^package-lock.json$|yarn.lock|node_modules)'''
+	files = [
+	    '''^\.?gitleaks.toml$''',
+	    '''(.*?)(jpg|gif|doc|pdf|bin)$''',
+	    '''^package-lock\.json$''',
+	    '''yarn\.lock''',
+	    '''go\.mod''',
+	    '''go\.sum''',
+	    '''README\.md''',
+	    '''node_modules'''
+	]
