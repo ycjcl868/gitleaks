@@ -33,7 +33,7 @@ title = "gitleaks config"
 	tags = ["key", "Github"]
 [[rules]]
 	description = "Github Token"
-	regex = '''[0-9a-zA-Z]{35,40}'''
+	regex = '''(?:^|^commit\/)[0-9a-zA-Z]{35,40}'''
 	tags = ["key", "Github Token"]
 [[rules]]
 	description = "Alibaba"
